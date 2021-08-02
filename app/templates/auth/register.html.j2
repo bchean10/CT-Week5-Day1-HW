@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+    {% block css%}
+        {# custom css for page #}
+    {%endblock%}
+  {% block title %}
+    Register
+  {% endblock %}
+{% block content %}
+<h1>Register</h1>
+<small style="color:red">{{error}}</small>
+
+<form action="{{url_for('auth.edit_profile') if current_user.is_authenticated else url_for('auth.register')}}" method="POST">
+  {{ form.hidden_tag() }}
+
+  {% if current_user.is_authenticated %}
+  <img src="https://avatars.dicebear.com/api/avataaars/{{current_user.icon}}.svg" style="height:75px">
+  {% endif %}
+
+  {{form.icon.label}}<br>
+  {% for subfield in form.icon %}
+    {{ subfield }}
+    {{ subfield.lable | safe }}
+  {% endfor %}<br>
+  {% for error in form.icon.errors %}
+  <small style="color:red;">{{ error }}</small><br>
+  {% endfor %}<br>
+
+  {{ form.first_name.label(class="form.label") }}
+  {{ form.first_name(class="form-control", value=current_user.first_name) }}
+  
+  {{ form.last_name.label(class="form.label")}}
+  {{ form.last_name(class="form-control", value=current_user.last_name) }}
+  
+  {{ form.email.label(class="form-label") }}
+  {{ form.email(class="form-control", value=current_user.email) }}
+  
+  {% for error in form.email.errors %}
+  <small style="color:red;">{{ error }}</small><br>
+  {% endfor %}
+  
+  {{ form.password.label(class="form-label") }}
+  {{ form.password(class="form-control") }}
+  
+  {{ form.confirm_password.label(class="form-label") }}
+  {{ form.confirm_password(class="form-control") }}
+  
+  {% for error in form.confirm_password.errors %}
+  <small style="color:red;">{{ error }}</small><br>
+  {% endfor %}
+
+  {{ form.submit(class="btn btn-primary") }}
+</form>
+
+{% endblock %}

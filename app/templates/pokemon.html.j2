@@ -1,8 +1,11 @@
 {% extends 'base.html'%}
+    {% block title %}
+        Pokemon API Lookup
+    {% endblock %}
 {% block content %}
 
 <h1>Pokemon</h1>
-<form action="{{url_for('pokemons')}}" method = "POST">
+<form action="{{url_for('main.pokemons')}}" method = "POST">
     {{ form.hidden_tag() }}
     {{ form.pokemon_name.label(class="form-label") }}
     {{ form.pokemon_name(class="form-control") }}
