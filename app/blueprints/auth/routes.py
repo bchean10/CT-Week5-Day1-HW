@@ -36,7 +36,7 @@ def login():
         if u is not None and u.check_hashed_password(password):
             login_user(u)
             flash('Successfully logged in', 'success')
-            return redirect(url_for('main.index'))
+            return redirect(url_for('data.index'))
         else:
             flash('Invalid Username Password', 'danger')
             return redirect(url_for('auth.login'))
@@ -68,7 +68,7 @@ def edit_profile():
         try:
             current_user.from_dict(new_user_data)
             flash('Profile Updated', 'success')
-            return redirect(url_for('main.index'))
+            return redirect(url_for('data.index'))
         except:
             flash('There was an error editing your profile, please try again', 'danger')
             return redirect(url_for('auth.edit_profile'))

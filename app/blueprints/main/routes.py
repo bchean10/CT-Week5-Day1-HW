@@ -1,13 +1,9 @@
-from flask import render_template, request, flash
+from flask import render_template, request, flash, redirect, url_for
 import requests
 from flask_login import login_required
 from .forms import PokeForm
 from . import bp as main
-
-@main.route('/', methods = ['GET'])
-@login_required
-def index():
-    return render_template('index.html.j2')
+from app.blueprints.data.models import PokeData
 
 @main.route('/pokemons', methods=['GET', 'POST'])
 @login_required
@@ -28,6 +24,12 @@ def pokemons():
                 'base_experience':data['base_experience'],
                 'sprites':data['sprites']['front_shiny']
             }
+            poke = PokeData.query.filter_by(pokemon_name = form.pokemon_name.data.lower()).first()
+            if poke:
+                flash('Pokemon already exists', 'danger')
+            else:
+                poke = PokeData(pokemon_name = pokemon_dict['pokemon_name'], abilities = pokemon_dict['abilities'], base_experience = pokemon_dict['base_experience'], sprites = pokemon_dict['sprites'])
+                poke.save()
             return render_template("pokemon.html.j2",form=form, pokemon=pokemon_dict)
         else:
             flash(f'Please check for error', 'danger')

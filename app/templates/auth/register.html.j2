@@ -19,7 +19,7 @@
   {{form.icon.label}}<br>
   {% for subfield in form.icon %}
     {{ subfield }}
-    {{ subfield.lable | safe }}
+    {{ subfield.label | safe }}
   {% endfor %}<br>
   {% for error in form.icon.errors %}
   <small style="color:red;">{{ error }}</small><br>
