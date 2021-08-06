@@ -1,14 +1,33 @@
 <div class="card" style="width: 18rem;">
-    <img src="{{ pokemons.sprites }}" class="card-img-top" alt="Sprite">
+    <img src="{{ d.sprites }}" class="card-img-top" alt="Sprite">
     <div class="card-body">
       <h5 class="card-title">Pokemon Name</h5>
     </div>
     <ul class="list-group list-group-flush">
-      <li class="list-group-item">Main Ability</li>
-      <li class="list-group-item">Base Experience</li>
-      <li class="list-group-item">Sprites</li>
+      <li class="list-group-item">Main Ability: {{ d.abilities }}</li>
+      <li class="list-group-item">Base Experience: {{ d.base_experience }}</li>
     </ul>
     <div class="card-body">
-      <a href="#" class="card-link">Pokemon API Page</a>
+      <form method="POST" action="{{url_for('data.pokedata', pokemon_id=d.id)}}">
+        <div class="mb-3">
+          <textarea class="form-control" placeholder = "Comment here" name="body" style="height:100px">Comments</textarea>
+        </div>
+        <span><button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Comment</button></span>
+      </form>
+      {% for comment in d.comments %}
+      <h5>{{ comment.user.first_name }} {{ comment.user.last_name }} commented: 
+        {% if current_user.id == comment.user.id %}
+        <span class="float-end" ><small><a href="{{url_for('data.delete_comment', id=comment.id)}}" style="color:lightcoral"><i class="fas fa-trash"></i></a></small></span>
+        {% endif %}
+      </h5>
+      <p class="card-text">{{ comment.body if view_all else comment.body }}</p>
+        <small><a href="{{url_for('data.get_comment',id=comment.id)}}"><i class="fas fa-eye"></i></a></small>
+        {% if current_user.id == comment.user.id %}
+        <small class="float-end"><a href="{{url_for('data.edit_comment', id=comment.id)}}"><i class="fas fa-edit"></i></a></small>
+        {% endif %}
+        <p class="card-text"><small class="text-muted">{{moment(comment.date_created).fromNow()}}</small>
+      <span style="color:lightcoral" class="float-end"><small>{{"edited "+moment(comment.date_updated).fromNow()|string() if comment.date_updated else ''}}</small></span>
+      </p>
+      {% endfor %}
     </div>
   </div>
